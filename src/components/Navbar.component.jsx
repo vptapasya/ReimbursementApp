@@ -2,11 +2,21 @@ import React from "react";
 
 import { FaPowerOff } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+
 import { useAuthContext } from "../context/AuthContext";
 
 const NavbarComponent = () => {
   const navigate = useNavigate();
   const { isAdmin, logout } = useAuthContext();
+
+  const logoutHandler = async () => {
+    try {
+      await logout();
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="py-3 bg-slate-600">
@@ -19,10 +29,7 @@ const NavbarComponent = () => {
         </Link>
         <div
           className="text-red-500 p-2 cursor-pointer bg-red-50 rounded-full hover:rounded-full hover:bg-red-100"
-          onClick={() => {
-            logout();
-            navigate("/login");
-          }}
+          onClick={() => logoutHandler()}
         >
           <FaPowerOff />
         </div>

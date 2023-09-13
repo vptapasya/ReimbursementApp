@@ -1,14 +1,39 @@
 import React, { useState } from "react";
 import Lottie from "lottie-react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 import loginJson from "../assests/login.json";
 import { useAuthContext } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { auth } from "../config/firebase";
+
+const INITIAL_VALUE = {
+  email: "",
+  password: "",
+  error: false,
+};
 
 const LoginComponent = () => {
   const navigate = useNavigate();
   const { login } = useAuthContext();
-  const [loginUser, setLoginUser] = useState({ name: "", password: "" });
+  const [loginUser, setLoginUser] = useState(INITIAL_VALUE);
+
+  const loginHandler = async () => {
+    try {
+      await signInWithEmailAndPassword(
+        auth,
+        loginUser.email,
+        loginUser.password
+      );
+      setLoginUser(INITIAL_VALUE);
+      login({ email: loginUser.email });
+      if (loginUser.email === "admin@admin.com") navigate("/admin/");
+      else navigate("/");
+    } catch (error) {
+      console.log(error);
+      setLoginUser({ ...loginUser, error: true });
+    }
+  };
 
   return (
     <div className="p-8 border rounded-2xl bg-white flex flex-col">
@@ -34,9 +59,9 @@ const LoginComponent = () => {
             id="name"
             className="bg-slate-50 border border-slate-300 text-slate-900 rounded p-1 px-2 w-72"
             placeholder="Name"
-            value={loginUser.name}
+            value={loginUser.email}
             onChange={(e) =>
-              setLoginUser({ ...loginUser, name: e.target.value })
+              setLoginUser({ ...loginUser, email: e.target.value })
             }
           />
         </div>
@@ -60,12 +85,16 @@ const LoginComponent = () => {
           />
         </div>
 
+        {loginUser.error ? (
+          <p className="text-red-500 h-4">Invalid email or password!!!</p>
+        ) : (
+          <p className="h-4"></p>
+        )}
+
         <button
           className="w-full text-slate-50 bg-slate-600 rounded text-sm px-5 py-2.5 text-center"
           onClick={() => {
-            login(loginUser);
-            if (loginUser.name === "admin") navigate("/admin/");
-            else navigate("/");
+            loginHandler();
           }}
         >
           Sign in
