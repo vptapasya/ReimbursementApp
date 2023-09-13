@@ -58,4 +58,5 @@ const AddClaimComponent = () => {
   );
 };
 
+
 export default AddClaimComponent;
