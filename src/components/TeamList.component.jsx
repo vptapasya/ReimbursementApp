@@ -12,7 +12,7 @@ const dummyTeams = [
 const TeamListComponent = () => {
   const [teams, setTeams] = useState(dummyTeams);
   return (
-    <div>
+    <div className="flex gap-4 w-full flex-wrap">
       {teams.map((team) => (
         <TeamItemComponent key={team.id} team={team} />
       ))}

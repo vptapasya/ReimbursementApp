@@ -6,7 +6,7 @@ const DialogComponent = ({ dialog, onClose }) => {
 
   return (
     <div className="fixed top-0 bg-slate-100 bg-opacity-50 w-screen h-screen">
-      <div className="fixed top-1/3 left-1/3 z-50 w-full p-4 overflow-x-hidden overflow-y-auto max-h-full">
+      <div className="fixed top-1/5 mt-20 left-1/3 z-50 w-full p-4 overflow-x-hidden overflow-y-auto max-h-full">
         <div className="relative w-full max-w-lg max-h-full">
           <div className="relative bg-white rounded-lg shadow ">
             <div className="flex justify-between px-6 py-6">

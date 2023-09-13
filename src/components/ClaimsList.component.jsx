@@ -7,6 +7,7 @@ const dummyClaims = [
     date: "8/1/2023",
     place: "Mercy Electronics",
     price: "100",
+    team: "Abcd",
     status: "Pending",
   },
   {
@@ -14,6 +15,7 @@ const dummyClaims = [
     date: "8/2/2023",
     place: "Mercy Electronics",
     price: "120",
+    team: "Efdg",
     status: "Pending",
   },
   {
@@ -21,6 +23,7 @@ const dummyClaims = [
     date: "8/5/2023",
     place: "Mercy Electronics",
     price: "150",
+    team: "Abcd",
     status: "Pending",
   },
   {
@@ -28,13 +31,14 @@ const dummyClaims = [
     date: "8/10/2023",
     place: "Mercy Electronics",
     price: "120",
+    team: "Abcd",
     status: "Pending",
   },
 ];
 
 const ClaimsListComponent = () => {
   return (
-    <div>
+    <div className="flex gap-4 w-full flex-wrap">
       {dummyClaims.map((claim) => (
         <ClaimsItemComponent key={claim.id} claim={claim} />
       ))}

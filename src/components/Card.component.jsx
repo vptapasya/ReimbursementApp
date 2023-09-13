@@ -1,6 +1,12 @@
 import React from "react";
 
-const CardComponent = ({ className, icon, label, amount, onClick }) => {
+const CardComponent = ({
+  className,
+  icon,
+  label,
+  amount,
+  onClick = () => {},
+}) => {
   return (
     <div
       onClick={() => onClick()}

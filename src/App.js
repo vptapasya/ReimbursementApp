@@ -6,10 +6,8 @@ import LoginPage from "./pages/Login.page";
 import ErrorPage from "./pages/Error.page";
 import HomePage from "./pages/Home.page";
 import ClaimsPage from "./pages/Claims.page";
-import AddClaimPage from "./pages/AddClaim.page";
 import AdminHomePage from "./pages/AdminHome.page";
 import AdminClaimsPage from "./pages/AdminClaims.page";
-import AdminCreateTeamPage from "./pages/AdminCreateTeam.page";
 import AdminTeamspage from "./pages/AdminTeams.page";
 import { AuthProvider } from "./context/AuthContext";
 import UserProtectedRoute from "./shared/UserProtectedRoute";
@@ -35,14 +33,6 @@ const router = createBrowserRouter([
           </UserProtectedRoute>
         ),
       },
-      {
-        path: "claims/add",
-        element: (
-          <UserProtectedRoute>
-            <AddClaimPage />
-          </UserProtectedRoute>
-        ),
-      },
     ],
   },
   {
@@ -62,14 +52,6 @@ const router = createBrowserRouter([
         element: (
           <UserProtectedRoute>
             <AdminClaimsPage />
-          </UserProtectedRoute>
-        ),
-      },
-      {
-        path: "claims/createTeam",
-        element: (
-          <UserProtectedRoute>
-            <AdminCreateTeamPage />
           </UserProtectedRoute>
         ),
       },
