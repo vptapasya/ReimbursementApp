@@ -7,6 +7,7 @@ const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [teams, setTeams] = useState([]);
 
   const login = (user) => {
     setUser({ ...user, isAdmin: user.email === "admin@admin.com" });
@@ -27,7 +28,9 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, isAdmin, logout }}>
+    <AuthContext.Provider
+      value={{ user, login, isAdmin, logout, teams, setTeams }}
+    >
       {children}
     </AuthContext.Provider>
   );

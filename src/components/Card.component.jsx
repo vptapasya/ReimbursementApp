@@ -4,19 +4,23 @@ const CardComponent = ({
   className,
   icon,
   label,
-  amount,
+  amount = null,
   onClick = () => {},
 }) => {
   return (
     <div
       onClick={() => onClick()}
-      className={`h-60 w-80 bg-slate-100 border border-slate-400 flex flex-col justify-center rounded m-2 hover:cursor-pointer ${className}`}
+      className={`h-60 w-80 bg-emerald-50 border border-emerald-400 flex flex-col justify-center rounded m-2 hover:cursor-pointer ${className}`}
     >
-      <div className="text-amber-500 text-5xl flex justify-center mb-2">
+      <div className="text-emerald-600 text-5xl flex justify-center mb-2">
         {icon}
       </div>
-      <p className="text-3xl font-light text-center">{label}</p>
-      {amount && <p className="text-xl text-center">$ {amount}</p>}
+      <p className="text-xl text-emerald-950 font-medium text-center">
+        {label}
+      </p>
+      {amount !== null && (
+        <p className="text-5xl text-emerald-950 my-2 text-center">$ {amount}</p>
+      )}
     </div>
   );
 };

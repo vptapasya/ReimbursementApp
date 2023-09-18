@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CardComponent from "../components/Card.component";
 import { HiMiniUserGroup } from "react-icons/hi2";
 import { FaCircleDollarToSlot } from "react-icons/fa6";
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import HeaderComponent from "../components/Header.component";
 import DialogComponent from "../components/Dialog.component";
 import AddMoneyComponent from "../components/AddMoney.component";
+import { useAuthContext } from "../context/AuthContext";
 
 const INITAL_STATE = {
   title: "Add Money",
@@ -16,9 +17,14 @@ const INITAL_STATE = {
 
 const AdminHomePage = () => {
   const navigate = useNavigate();
+  const { teams } = useAuthContext();
   const [dialog, setDialog] = useState(INITAL_STATE);
 
   const dialogClose = () => setDialog({ ...dialog, isOpen: false });
+
+  useEffect(() => {
+    setDialog({ ...dialog, body: <AddMoneyComponent onClose={dialogClose} /> });
+  }, [teams]);
 
   return (
     <div>

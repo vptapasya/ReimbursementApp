@@ -5,7 +5,9 @@ import { useNavigate } from "react-router-dom";
 
 import loginJson from "../assests/login.json";
 import { useAuthContext } from "../context/AuthContext";
-import { auth } from "../config/firebase";
+import { auth, teamsDocsRef } from "../config/firebase";
+import { getDocs } from "firebase/firestore";
+import { FETCH_TEAMS } from "../utils";
 
 const INITIAL_VALUE = {
   email: "",
@@ -15,8 +17,11 @@ const INITIAL_VALUE = {
 
 const LoginComponent = () => {
   const navigate = useNavigate();
-  const { login } = useAuthContext();
+  const { login, setTeams } = useAuthContext();
   const [loginUser, setLoginUser] = useState(INITIAL_VALUE);
+
+  // admin@admin.com - admin123
+  // team@team.com - team123
 
   const loginHandler = async () => {
     try {
@@ -25,10 +30,19 @@ const LoginComponent = () => {
         loginUser.email,
         loginUser.password
       );
+      const teams = await FETCH_TEAMS();
       setLoginUser(INITIAL_VALUE);
-      login({ email: loginUser.email });
-      if (loginUser.email === "admin@admin.com") navigate("/admin/");
-      else navigate("/");
+      if (loginUser.email === "admin@admin.com") {
+        login({ email: loginUser.email });
+        setTeams(teams);
+        navigate("/admin/");
+      } else {
+        const loggedInTeam = teams.find(
+          (team) => team.email === loginUser.email
+        );
+        login(loggedInTeam);
+        navigate("/");
+      }
     } catch (error) {
       console.log(error);
       setLoginUser({ ...loginUser, error: true });
@@ -92,7 +106,7 @@ const LoginComponent = () => {
         )}
 
         <button
-          className="w-full text-slate-50 bg-slate-600 rounded text-sm px-5 py-2.5 text-center"
+          className="w-full text-emerald-50 bg-emerald-600 rounded text-sm px-5 py-2.5 text-center"
           onClick={() => {
             loginHandler();
           }}

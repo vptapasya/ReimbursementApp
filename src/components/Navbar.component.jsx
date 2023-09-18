@@ -19,11 +19,11 @@ const NavbarComponent = () => {
   };
 
   return (
-    <div className="py-3 bg-slate-600">
+    <div className="py-3 bg-emerald-600">
       <div className="flex justify-between mx-8 ">
         <Link
           to={`${isAdmin() ? "/admin" : "/"}`}
-          className="text-xl text-slate-50 font-mono hover:cursor-pointer"
+          className="text-xl text-emerald-50 font-mono hover:cursor-pointer"
         >
           Reimbursement
         </Link>

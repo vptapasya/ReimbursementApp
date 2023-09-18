@@ -1,35 +1,79 @@
 import React from "react";
-import { useAuthContext } from "../context/AuthContext";
+import { FaRegFilePdf } from "react-icons/fa";
+import { AiFillCheckCircle } from "react-icons/ai";
 
-const ClaimsItemComponent = ({ claim }) => {
-  const { date, place, price, status, team } = claim;
+import { useAuthContext } from "../context/AuthContext";
+import { getDownloadURL, ref } from "firebase/storage";
+import { fireStore, storage } from "../config/firebase";
+import { doc, updateDoc } from "firebase/firestore";
+
+const ClaimsItemComponent = ({ claim, getClaims }) => {
+  const { date, place, amount, status, bill, teamName, claimId } = claim;
   const { isAdmin } = useAuthContext();
 
+  const approveHandler = async () => {
+    console.log(claimId);
+    const updateClaimDoc = doc(fireStore, "claims", claimId);
+    await updateDoc(updateClaimDoc, {
+      status: "approved",
+    });
+    getClaims();
+  };
+
+  const downloadHandler = async () => {
+    const pathReference = ref(storage, `files/${bill}`);
+    try {
+      const url = await getDownloadURL(pathReference);
+      const link = document.createElement("a");
+      link.href = url;
+      link.target = "_blank";
+      link.setAttribute("download", bill);
+      link.click();
+    } catch (error) {
+      console.error("Error getting download URL:", error);
+    }
+  };
+
   return (
-    <div className="border rounded border-slate-200 text-slate-950 bg-slate-300 p-4 mb-2">
+    <tr className="bg-white border-b">
       {isAdmin() && (
-        <div className="flex text-xl">
-          <p className="min-w-[12vw] font-semibold mr-3 mb-1">Team</p>
-          <p>{team}</p>
-        </div>
+        <th className="px-6 py-4 font-medium text-emerald-900 whitespace-nowrap">
+          {teamName}
+        </th>
       )}
-      <div className="flex text-xl">
-        <p className="min-w-[12vw] font-semibold mr-3 mb-1">Date purchased</p>
-        <p>{date}</p>
-      </div>
-      <div className="flex text-xl">
-        <p className="min-w-[12vw] font-semibold mr-3 mb-1">Purchased at</p>
-        <p>{place}</p>
-      </div>
-      <div className="flex text-xl">
-        <p className="min-w-[12vw] font-semibold mr-3 mb-1">Amount</p>
-        <p>$ {price}</p>
-      </div>
-      <div className="flex text-xl">
-        <p className="min-w-[12vw] font-semibold mr-3 mb-1">Status</p>
-        <p>{status}</p>
-      </div>
-    </div>
+
+      <td className="px-6 py-4">{date}</td>
+      <td className="px-6 py-4">{place}</td>
+      <td className="px-10 py-4">${amount}</td>
+      {status === "pending" && isAdmin() ? (
+        <td className="px-6 py-4">
+          <div
+            className="flex gap-2 items-center cursor-pointer"
+            onClick={() => {
+              approveHandler();
+            }}
+          >
+            <div className=" text-emerald-600 ">Approve</div>
+            <div className=" text-emerald-600 ">
+              <AiFillCheckCircle />
+            </div>
+          </div>
+        </td>
+      ) : (
+        <td className="px-6 py-4">{status}</td>
+      )}
+      <td
+        className="px-6 py-4 text-right flex gap-3 justify-center items-center cursor-pointer"
+        onClick={() => {
+          downloadHandler();
+        }}
+      >
+        <div className=" text-blue-600">Document</div>
+        <div className=" text-blue-600">
+          <FaRegFilePdf />
+        </div>
+      </td>
+    </tr>
   );
 };
 
